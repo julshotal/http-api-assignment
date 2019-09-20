@@ -11,33 +11,35 @@ const onRequest = (request, response) => {
   const parsedURL = url.parse(request.url);
   const params = query.parse(parsedURL.query);
 
+  const acceptedTypes = request.headers.accept.split(',');
+
   switch (parsedURL.pathname) {
     case '/':
-      html.getIndex(request, response);
+      html.getIndex(request, response, acceptedTypes[0]);
       break;
     case '/style.css':
-      html.getCSS(request, response);
+      html.getCSS(request, response, acceptedTypes[0]);
       break;
     case '/success':
-      json.success(request, response);
+      json.success(request, response, acceptedTypes[0]);
       break;
     case '/badRequest':
-      json.badRequest(request, response, params);
+      json.badRequest(request, response, params, acceptedTypes[0]);
       break;
     case '/unauthorized':
-      json.unauthorized(request, response, params);
+      json.unauthorized(request, response, params, acceptedTypes[0]);
       break;
     case '/forbidden':
-      json.forbidden(request, response);
+      json.forbidden(request, response, acceptedTypes[0]);
       break;
     case '/internal':
-      json.success(request, response);
+      json.internal(request, response, acceptedTypes[0]);
       break;
     case '/notImplemented':
-      json.notImplemented(request, response);
+      json.notImplemented(request, response, acceptedTypes[0]);
       break;
     default:
-      html.getIndex(request, response);
+      json.notFound(request, response, acceptedTypes[0]);
       break;
   }
 };
